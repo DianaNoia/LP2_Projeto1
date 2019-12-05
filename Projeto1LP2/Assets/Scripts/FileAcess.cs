@@ -9,12 +9,9 @@ using UnityEngine.UI;
 
 public class FileAcess : MonoBehaviour
 {
-    
+
     //Nome da pasta
     private const string appName = "MyIMDBSearcher";
-
-    [SerializeField]
-    private InputField searchTerm;
 
     //Nome do ficheiro que quero
     private const string fileTitleBasics = "title.basics.tsv.gz";
@@ -28,22 +25,31 @@ public class FileAcess : MonoBehaviour
     //Diferentes géneros
     private ISet<string> allGenres;
 
-
+    [SerializeField]
+    private InputField searchTerm;
 
     public void Start()
     {
 
     }
-    
+
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            if(searchTerm.text != "")
+            if (searchTerm.text != "")
             {
                 TestingIfItWorks(searchTerm.text);
             }
-        }  
+        }
+    }
+
+    public void ClickButton()
+    {
+        if (searchTerm.text != "")
+        {
+            TestingIfItWorks(searchTerm.text);
+        }
     }
 
     public void TestingIfItWorks(string doIt)
