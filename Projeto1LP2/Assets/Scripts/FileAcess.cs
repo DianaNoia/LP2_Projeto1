@@ -3,21 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class FileAcess : MonoBehaviour
 {
+    
     //Nome da pasta
     private const string appName = "MyIMDBSearcher";
+
+    [SerializeField]
+    private InputField searchTerm;
 
     //Nome do ficheiro que quero
     private const string fileTitleBasics = "title.basics.tsv.gz";
 
     //Numero de titulos a mostrar por vez
     private const int numTitlesToShowOnScreen = 10;
-    
+
     //Coleção de títulos
     private ICollection<Title> titles;
 
@@ -25,7 +29,24 @@ public class FileAcess : MonoBehaviour
     private ISet<string> allGenres;
 
 
-    private void TestingIfItWorks()
+
+    public void Start()
+    {
+
+    }
+    
+    public void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
+        {
+            if(searchTerm.text != "")
+            {
+                TestingIfItWorks(searchTerm.text);
+            }
+        }  
+    }
+
+    public void TestingIfItWorks(string doIt)
     {
         //Variável auxiliar para as pesquisas
         Title[] queryResults;
@@ -61,36 +82,28 @@ public class FileAcess : MonoBehaviour
         GZipReader(fileTitleBasicsFull, LineToTitle);
 
         //Mostrar todos os géneros conhecidos, ordenados por eles próprios
-        Console.Write($"\t=> Known genres (total {allGenres.Count}): ");
+        Debug.Log($"\t=> Known genres (total {allGenres.Count}): ");
         foreach (string genre in allGenres.OrderBy(g => g))
-            Console.Write($"{genre} ");
-        Console.WriteLine();
+            Debug.Log($"{genre} ");
 
-        /* Pesquisar por tútlos cujo título contenha "video" e "game",
-           ordenando os resultados por ano e depois por título e convertendo
-           os resultados num array para depois poder ser percorrido de 
-           forma eficiente */
+        /* Pesquisar pelo título, ordenando os resultados por ano e depois por
+           título e convertendo os resultados num array para depois poder ser
+           percorrido de forma eficiente */
 
         queryResults =
             (from title in titles
-             where title.PrimaryTitle.ToLower().Contains("video")
-             where title.PrimaryTitle.ToLower().Contains("game")
+             where title.PrimaryTitle.ToLower().Contains(doIt.ToLower())
              select title)
              .OrderBy(title => title.StartYear)
              .ThenBy(title => title.PrimaryTitle)
              .ToArray();
 
         //Dizer quantos títulos foram encontrados
-        Console.WriteLine($"\t=> There are {queryResults.Count()} titles"
-                + " with \"video\" and \"game\"");
+        Debug.Log($"\t=> There are {queryResults.Count()} titles with \"{doIt}");
 
         // Mostrar 10 títulos de cada vez
-        while (numTitlesShown <queryResults.Length)
+        while (numTitlesShown < queryResults.Length)
         {
-            Console.WriteLine(
-                $"\t => Press key to see next {numTitlesToShowOnScreen} titles...");
-            Console.ReadKey(true);
-
             //mostrar próximos 10
             for (int i = numTitlesShown;
                 i < numTitlesShown + numTitlesToShowOnScreen
@@ -104,34 +117,31 @@ public class FileAcess : MonoBehaviour
                 Title title = queryResults[i];
 
                 //Mostrar info sobre o título
-                Console.Write("\t\t* ");
-                Console.Write($"\"{title.PrimaryTitle}\" ");
-                Console.Write($"({title.StartYear?.ToString() ?? "unknown year"}): ");
+                Debug.Log("\t\t* ");
+                Debug.Log($"\"{title.PrimaryTitle}\" ");
+                Debug.Log($"({title.StartYear?.ToString() ?? "unknown year"}): ");
                 foreach (string genre in title.Genres)
                 {
                     if (!firstGenre) Console.Write("/");
-                    Console.Write($"{genre} ");
+                    Debug.Log($"{genre} ");
                     firstGenre = false;
                 }
-                Console.WriteLine();
             }
             //Próximos 10 títulos
             numTitlesShown += numTitlesToShowOnScreen;
         }
     }
-    
-
 
     private static void GZipReader(
         string file, Action<string> actionForEachLine)
     {
         //Abrir ficheiro em modo leitura
         using (FileStream fs = new FileStream(
-            file, FileMode.Open, FileAcess.Read))
+            file, FileMode.Open, FileAccess.Read))
         {
             //Decorar o ficheiro com um compressor p/ formato GZip
             using (GZipStream gzs = new GZipStream(
-                fs, CompressionMode.Decompress))
+            fs, CompressionMode.Decompress))
             {
                 //Usar um StreamReader p/ simpliciar a leitura
                 using (StreamReader sr = new StreamReader(gzs))
@@ -152,12 +162,12 @@ public class FileAcess : MonoBehaviour
             }
         }
     }
-    
+
     private void LineToTitle(string line)
     {
         short aux;
-        string[] fields = line.Split("\t");
-        string[] titleGenres = fields[8].Split(",");
+        string[] fields = line.Split('\t');
+        string[] titleGenres = fields[8].Split(',');
         ICollection<string> cleanTitleGenres = new List<string>();
         short? startYear;
 
@@ -181,7 +191,6 @@ public class FileAcess : MonoBehaviour
                 cleanTitleGenres.Add(genre);
 
         //Adicionar géneros válidos ao conjunto de géneros da base de dados
-
         foreach (string genre in cleanTitleGenres)
             allGenres.Add(genre);
 
@@ -191,9 +200,6 @@ public class FileAcess : MonoBehaviour
 
         //Adicionar Título à coleção de títulos
         titles.Add(t);
-
     }
-
-
 
 }

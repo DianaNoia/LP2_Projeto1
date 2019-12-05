@@ -13,8 +13,7 @@ namespace LP1
     {
         //Instanciar classe InputEnter
         private InputEnter ie = new InputEnter();
-                     
-                
+                                     
         //Nome da pasta
         private const string appName = "MyIMDBSearcher";
 
