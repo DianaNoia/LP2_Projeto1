@@ -13,3 +13,4 @@ Projeto realizado por:
 ## Diagrama UML
 
 ## Referências
+Agradecimento especial ao grupo constituido por [Tiago Alves]() e [Diogo Maia]()
