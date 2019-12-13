@@ -10,6 +10,38 @@ using UnityEngine.UI;
 public class FileAcess : MonoBehaviour
 {
 
+    [SerializeField]
+    private InputField searchTerm;
+
+    [SerializeField]
+    private Text inputresult;
+
+    [SerializeField]
+    private Text result1;
+    
+    [SerializeField]
+    private Text result2;
+
+    [SerializeField]
+    private Text result3;
+
+    [SerializeField]
+    private Text result4;
+
+    [SerializeField]
+    private Text result5;
+
+    [SerializeField]
+    private Text result6;
+
+    [SerializeField]
+    private Text result7;
+
+    [SerializeField]
+    private Text result8;
+
+
+
     //Nome da pasta
     private const string appName = "MyIMDBSearcher";
 
@@ -17,21 +49,13 @@ public class FileAcess : MonoBehaviour
     private const string fileTitleBasics = "title.basics.tsv.gz";
 
     //Numero de titulos a mostrar por vez
-    private const int numTitlesToShowOnScreen = 10;
+    private const int numTitlesToShowOnScreen = 8;
 
     //Coleção de títulos
     private ICollection<Title> titles;
 
     //Diferentes géneros
     private ISet<string> allGenres;
-
-    [SerializeField]
-    private InputField searchTerm;
-
-    public void Start()
-    {
-
-    }
 
     public void Update()
     {
@@ -105,7 +129,8 @@ public class FileAcess : MonoBehaviour
              .ToArray();
 
         //Dizer quantos títulos foram encontrados
-        Debug.Log($"\t=> There are {queryResults.Count()} titles with \"{doIt}");
+        inputresult.text = $"\t=> There are {queryResults.Count()}" +
+            $" titles with \"{doIt}";
 
         // Mostrar 10 títulos de cada vez
         while (numTitlesShown < queryResults.Length)
