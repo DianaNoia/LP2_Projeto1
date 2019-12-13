@@ -20,9 +20,6 @@ public class FileAcess : MonoBehaviour
     private Text[] results;
 
 
-
-
-
     //Nome da pasta
     private const string appName = "MyIMDBSearcher";
 
