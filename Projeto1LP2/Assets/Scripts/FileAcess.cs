@@ -16,29 +16,10 @@ public class FileAcess : MonoBehaviour
     [SerializeField]
     private Text inputresult;
 
-    [SerializeField]
-    private Text result1;
     
-    [SerializeField]
-    private Text result2;
+    private Text[] results;
 
-    [SerializeField]
-    private Text result3;
 
-    [SerializeField]
-    private Text result4;
-
-    [SerializeField]
-    private Text result5;
-
-    [SerializeField]
-    private Text result6;
-
-    [SerializeField]
-    private Text result7;
-
-    [SerializeField]
-    private Text result8;
 
 
 
@@ -56,6 +37,21 @@ public class FileAcess : MonoBehaviour
 
     //Diferentes géneros
     private ISet<string> allGenres;
+
+
+    public void Start()
+    {
+        GameObject[] tempArray = GameObject.FindGameObjectsWithTag
+            ("AssignedResult");
+        results = new Text[tempArray.Length];
+
+        for (int i = 0; i < tempArray.Length; i++)
+        {
+            results[i] = tempArray[i].GetComponent<Text>();
+        }
+        Debug.Log(results.Length);
+    }
+
 
     public void Update()
     {
@@ -129,37 +125,41 @@ public class FileAcess : MonoBehaviour
              .ToArray();
 
         //Dizer quantos títulos foram encontrados
-        inputresult.text = $"\t=> There are {queryResults.Count()}" +
-            $" titles with \"{doIt}";
+        inputresult.text = $"\tThere were found {queryResults.Count()}" +
+            $" titles within \"{doIt}\"";
 
-        // Mostrar 10 títulos de cada vez
-        while (numTitlesShown < queryResults.Length)
+        int n = 0;
+
+        //Mostrar de 8 em 8
+        for (int i = numTitlesShown;
+            i < numTitlesShown + numTitlesToShowOnScreen && i < queryResults.Length;
+            i++)
         {
-            //mostrar próximos 10
-            for (int i = numTitlesShown;
-                i < numTitlesShown + numTitlesToShowOnScreen
-                && i < queryResults.Length;
-                i++)
+            //Usar para melhorar a forma como mostramos os géneros
+            bool firstGenre = true;
+
+            //Obter título atual
+            Title title = queryResults[i];
+
+            //Mostrar info sobre o título
+            //Limpa conteúdo no text
+            results[n].text = "";
+
+            //Adiciona PrimaryTitle
+            results[n].text += $"\"{title.PrimaryTitle}\" ";
+
+            //Adiciona StartYear
+            results[n].text += $"({title.StartYear?.ToString() ?? "unknown year"}" +
+                $"): ";
+
+            foreach (string genre in title.Genres)
             {
-                //Usar para melhorar a forma como mostramos os géneros
-                bool firstGenre = true;
-
-                //Obter título atual
-                Title title = queryResults[i];
-
-                //Mostrar info sobre o título
-                Debug.Log("\t\t* ");
-                Debug.Log($"\"{title.PrimaryTitle}\" ");
-                Debug.Log($"({title.StartYear?.ToString() ?? "unknown year"}): ");
-                foreach (string genre in title.Genres)
-                {
-                    if (!firstGenre) Console.Write("/");
-                    Debug.Log($"{genre} ");
-                    firstGenre = false;
-                }
+                if (!firstGenre) Console.Write("/");
+                results[n].text += $"{genre} ";
+                firstGenre = false;
             }
-            //Próximos 10 títulos
-            numTitlesShown += numTitlesToShowOnScreen;
+
+            n++;
         }
     }
 
