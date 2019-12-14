@@ -15,9 +15,7 @@ public class FileAcess : MonoBehaviour
     [SerializeField]
     private Text inputresult;
 
-    
     private Text[] results;
-
 
     //Nome da pasta
     private const string appName = "MyIMDBSearcher";
@@ -34,6 +32,7 @@ public class FileAcess : MonoBehaviour
     //Diferentes géneros
     private ISet<string> allGenres;
 
+    private ButtonManager bm;
 
     public void Start()
     {
@@ -46,6 +45,7 @@ public class FileAcess : MonoBehaviour
             results[i] = tempArray[i].GetComponent<Text>();
         }
         Debug.Log(results.Length);
+        bm = GetComponent<ButtonManager>();
     }
 
 
@@ -124,6 +124,7 @@ public class FileAcess : MonoBehaviour
         inputresult.text = $"\tThere were found {queryResults.Count()}" +
             $" titles within \"{doIt}\"";
 
+
         int n = 0;
 
         //Mostrar de 8 em 8
@@ -154,9 +155,38 @@ public class FileAcess : MonoBehaviour
                 results[n].text += $"{genre} ";
                 firstGenre = false;
             }
-
             n++;
+
+            if (bm.nextWasClicked)
+            {
+                n += 8;
+                //Mostrar info sobre o título
+                //Limpa conteúdo no text
+                results[n].text = "";
+
+                //Adiciona PrimaryTitle
+                results[n].text += $"\"{title.PrimaryTitle}\" ";
+
+                //Adiciona StartYear
+                results[n].text += $"({title.StartYear?.ToString() ?? "unknown year"}" +
+                    $"): ";
+            }
+            else if (bm.previousWasClicked)
+            {
+                n -= 8;
+                //Mostrar info sobre o título
+                //Limpa conteúdo no text
+                results[n].text = "";
+
+                //Adiciona PrimaryTitle
+                results[n].text += $"\"{title.PrimaryTitle}\" ";
+
+                //Adiciona StartYear
+                results[n].text += $"({title.StartYear?.ToString() ?? "unknown year"}" +
+                    $"): ";
+            }
         }
+
     }
 
     private static void GZipReader(

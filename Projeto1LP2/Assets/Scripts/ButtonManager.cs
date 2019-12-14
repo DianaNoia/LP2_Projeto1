@@ -12,10 +12,10 @@ public class ButtonManager : MonoBehaviour
     private Button backButton;
 
     [SerializeField]
-    private Button next;
+    private Button nextButton;
 
     [SerializeField]
-    private Button previus;
+    private Button previousButton;
 
     [SerializeField]
     private GameObject startPage;
@@ -23,9 +23,17 @@ public class ButtonManager : MonoBehaviour
     [SerializeField]
     private GameObject backPage;
 
+    [SerializeField]
+    private Text[] texts;
+
+    public bool nextWasClicked;
+    public bool previousWasClicked;
 
     public void Start()
     {
+        nextWasClicked = false;
+        previousWasClicked = false;
+
         backPage.transform.localScale = Vector3.zero;
     }
 
@@ -38,7 +46,7 @@ public class ButtonManager : MonoBehaviour
 
         else
         {
-            backPage.transform.localScale = new Vector3(1,1,1);
+            backPage.transform.localScale = new Vector3(1, 1, 1);
         }
 
     }
@@ -51,7 +59,26 @@ public class ButtonManager : MonoBehaviour
 
         else
         {
-            startPage.transform.localScale = new Vector3(1,1,1);
+            startPage.transform.localScale = new Vector3(1, 1, 1);
         }
+    }
+
+    public void ToggleNextEigthResults()
+    {
+        for (int i = 0; i < texts.Length; i++)
+        {
+            texts[i].text = "";
+        }
+
+        nextWasClicked = true;
+    }
+    public void TogglePreviousEigthResults()
+    {
+        for (int i = 0; i < texts.Length; i++)
+        {
+            texts[i].text = "";
+        }
+
+        previousWasClicked = true;
     }
 }
