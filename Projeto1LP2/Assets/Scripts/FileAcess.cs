@@ -9,7 +9,6 @@ using UnityEngine.UI;
 
 public class FileAcess : MonoBehaviour
 {
-
     [SerializeField]
     private InputField searchTerm;
 

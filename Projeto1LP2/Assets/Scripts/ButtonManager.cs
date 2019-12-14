@@ -12,6 +12,12 @@ public class ButtonManager : MonoBehaviour
     private Button backButton;
 
     [SerializeField]
+    private Button next;
+
+    [SerializeField]
+    private Button previus;
+
+    [SerializeField]
     private GameObject startPage;
 
     [SerializeField]
@@ -22,7 +28,6 @@ public class ButtonManager : MonoBehaviour
     {
         backPage.transform.localScale = Vector3.zero;
     }
-
 
     public void ToggleBackPage()
     {
@@ -49,8 +54,4 @@ public class ButtonManager : MonoBehaviour
             startPage.transform.localScale = new Vector3(1,1,1);
         }
     }
-
-
-
-
 }
