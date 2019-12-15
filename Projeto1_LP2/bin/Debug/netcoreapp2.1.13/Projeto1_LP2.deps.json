@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v2.1.13",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v2.1.13": {
+      "Projeto1_LP2/1.0.0": {
+        "runtime": {
+          "Projeto1_LP2.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Projeto1_LP2/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

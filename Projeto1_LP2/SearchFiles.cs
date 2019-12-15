@@ -13,8 +13,6 @@ namespace Projeto1_LP2
 
         private const string fileTitleBasics = "title.basics.tsv.gz";
 
-        private const int numTitlesToShowOnScreen = 10;
-
         private ICollection<Title> titles;
 
         public ISet<string> allGenres;
@@ -26,8 +24,6 @@ namespace Projeto1_LP2
             Title[] queryResults;
 
             int numTitles = 0;
-
-            int numTitlesShown = 0;
 
             allGenres = new HashSet<string>();
 
@@ -54,8 +50,10 @@ namespace Projeto1_LP2
                  .ThenBy(title => title.PrimaryTitle)
                  .ToArray();
 
+            mUI.ShowSearchResults(queryResults);
+
             Console.WriteLine($"\t=> there are {queryResults.Count()} titles"
-                + $"with \"{searchText}\"");
+                + $"with {searchText}");
         }
 
 

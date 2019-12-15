@@ -12,6 +12,7 @@ namespace Projeto1_LP2
             SearchFiles sf = new SearchFiles();
             input = Console.ReadLine();
             sf.FileSearch(input);
+            //mUI.ShowSearchResults();
         }
     }
 }
