@@ -51,6 +51,7 @@ namespace Projeto1_LP2
                  .ToArray();
 
             mUI.ShowSearchResults(queryResults);
+            Console.Write(searchText);
 
             Console.WriteLine($"\t=> there are {queryResults.Count()} titles"
                 + $"with {searchText}");
@@ -92,7 +93,8 @@ namespace Projeto1_LP2
             }
             catch (Exception e)
             {
-                throw new InvalidOperationException($"Tried to parse '{line}', but got exception '{e.Message}'"
+                throw new InvalidOperationException($"Tried to parse '{line}'" +
+                    $", but got exception '{e.Message}'"
                     + $" with this stack trace: {e.StackTrace}");
             }
             foreach (string genre in titleGenres)

@@ -52,7 +52,8 @@ namespace Projeto1_LP2
 
                     Console.Write("\t\t* ");
                     Console.Write($"\"{title.PrimaryTitle}\" ");
-                    Console.Write($"({title.StartYear?.ToString() ?? "unknown year"}): ");
+                    Console.Write(
+                        $"({title.StartYear?.ToString() ?? "unknown year"}): ");
 
                     foreach(string genre in title.Genres)
                     {
