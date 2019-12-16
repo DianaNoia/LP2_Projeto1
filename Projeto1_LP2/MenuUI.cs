@@ -25,7 +25,7 @@ namespace Projeto1_LP2
         {
             Console.Write($"\t => Known Genres (total {sf.allGenres.Count}): ");
             foreach (string genre in sf.allGenres.OrderBy(g => g))
-                Console.Write($"{genre}");
+                Console.Write($"\t{genre}");
             Console.WriteLine();
         }
 
@@ -35,12 +35,13 @@ namespace Projeto1_LP2
 
             Console.WriteLine("Insert search term");
 
-            Console.WriteLine($"\t=> there are {queryResults.Count()} titles"
-                + $"with {searchText}");
+            Console.WriteLine();
+            Console.WriteLine($"\t=> There are {queryResults.Count()} titles"
+                + $" with {searchText}.");
 
             while (numTitlesShown < queryResults.Length)
             {
-                Console.WriteLine($"\t => Press key to see next " +
+                Console.WriteLine($"\t=> Press key to see the next " +
                     $"{numTitlesToShowOnScreen} titles");
 
                 for (int i = numTitlesShown;
@@ -64,7 +65,6 @@ namespace Projeto1_LP2
                     }
                     Console.WriteLine();
                 }
-
                 Console.ReadKey(true);
                 Console.Clear();
                 ShowMemory();
@@ -74,20 +74,26 @@ namespace Projeto1_LP2
 
         public void ShowMenu()
         {
+            Console.WriteLine("Welcome to our IMDb Searcher!");
+            Console.WriteLine();
             Console.WriteLine("1. Search title");
             Console.WriteLine("2. Credits");
             Console.WriteLine("3. Quit");
             Console.WriteLine();
-            Console.WriteLine("Write the correspondent number to proceed\n");
+            Console.WriteLine("Write the correspondent number to proceed.\n");
 
             ReadEntry();
         }
 
         public void ShowCredits()
         {
+            Console.WriteLine("This Searcher was made by:");
+            Console.WriteLine();
             Console.WriteLine("André Pedro      a21701115");
             Console.WriteLine("Diana Nóia       a21703004");
             Console.WriteLine("Inês Gonçalves   a21702076");
+            Console.WriteLine();
+            Console.WriteLine("Special thanks to our teacher Nuno Fachada!");
             Console.WriteLine();
             Console.WriteLine("Press any key to go back to the main menu\n");
             Console.ReadKey();
@@ -112,13 +118,13 @@ namespace Projeto1_LP2
                         ShowSearchResults(queryResults, inputSupport);
                         break; ;
 
-                    // If the player chooses 3
+                    // If the player chooses 2
                     case "2":
                         Console.Clear();
                         ShowCredits();
                         break;
 
-                    // If the player chooses 4
+                    // If the player chooses 3
                     case "3":
                         Console.Clear();
                         // Will break the loop and exit the program
