@@ -8,11 +8,7 @@ namespace Projeto1_LP2
         static MenuUI mUI = new MenuUI();
         static void Main(string[] args)
         {
-            string input;
-            SearchFiles sf = new SearchFiles();
-            input = Console.ReadLine();
-            sf.FileSearch(input);
-            //mUI.ShowSearchResults();
+            mUI.ShowMenu();
         }
     }
 }
