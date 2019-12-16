@@ -65,10 +65,37 @@ namespace Projeto1_LP2
                     Console.WriteLine();
                 }
 
-                Console.ReadKey(true);
-                Console.Clear();
-                ShowMemory();
-                numTitlesShown += numTitlesToShowOnScreen;
+                //Console.ReadKey(true);
+                //Console.Clear();
+                //ShowMemory();
+                //numTitlesShown += numTitlesToShowOnScreen;
+
+                ConsoleKeyInfo pressedKey;
+                pressedKey = Console.ReadKey();
+
+                if (pressedKey.Key == ConsoleKey.LeftArrow)
+                {
+                    Console.Clear();
+                    ShowMemory();
+                    numTitlesShown -= numTitlesToShowOnScreen;
+                }
+                else if (pressedKey.Key == ConsoleKey.RightArrow)
+                {
+                    Console.Clear();
+                    ShowMemory();
+                    numTitlesShown += numTitlesToShowOnScreen;
+                }
+                else if (pressedKey.Key == ConsoleKey.Backspace)
+                {
+                    Console.Clear();
+                    ShowMenu();
+                }
+                else
+                {
+                    Console.WriteLine("Input not correct, try again.");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
             }
         }
 
