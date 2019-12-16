@@ -19,9 +19,13 @@ namespace Projeto1_LP2
 
         private MenuUI mUI = new MenuUI();
 
-        public void FileSearch(string searchText)
+        public Title[] FileSearch(out string input)
         {
+            string searchText;
             Title[] queryResults;
+
+            searchText = Console.ReadLine();
+            input = searchText;
 
             int numTitles = 0;
 
@@ -50,11 +54,7 @@ namespace Projeto1_LP2
                  .ThenBy(title => title.PrimaryTitle)
                  .ToArray();
 
-            mUI.ShowSearchResults(queryResults);
-            Console.Write(searchText);
-
-            Console.WriteLine($"\t=> there are {queryResults.Count()} titles"
-                + $"with {searchText}");
+            return queryResults;
         }
 
 
