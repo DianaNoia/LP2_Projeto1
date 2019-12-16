@@ -24,6 +24,7 @@ namespace Projeto1_LP2
             string searchText;
             Title[] queryResults;
 
+            Console.WriteLine("Write what you would like to search!");
             searchText = Console.ReadLine();
             input = searchText;
 
