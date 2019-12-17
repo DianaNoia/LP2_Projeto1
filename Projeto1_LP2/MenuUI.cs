@@ -66,11 +66,6 @@ namespace Projeto1_LP2
                     Console.WriteLine();
                 }
 
-                //Console.ReadKey(true);
-                //Console.Clear();
-                //ShowMemory();
-                //numTitlesShown += numTitlesToShowOnScreen;
-
                 ConsoleKeyInfo pressedKey;
                 pressedKey = Console.ReadKey();
 
@@ -79,6 +74,8 @@ namespace Projeto1_LP2
                     Console.Clear();
                     ShowMemory();
                     numTitlesShown -= numTitlesToShowOnScreen;
+                    if (numTitlesShown < queryResults.Length)
+                        numTitlesShown = numTitlesToShowOnScreen;
                 }
                 else if (pressedKey.Key == ConsoleKey.RightArrow)
                 {
@@ -97,6 +94,16 @@ namespace Projeto1_LP2
                     Console.ReadKey();
                     Console.Clear();
                 }
+
+                //try
+                //{
+
+                //}
+                //catch (Exception e)
+                //{
+                //    throw new IndexOutOfRangeException(
+                //        $"Thats the limit of the array! '{e}'");
+                //}
             }
         }
 

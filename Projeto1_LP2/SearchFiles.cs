@@ -26,7 +26,6 @@ namespace Projeto1_LP2
 
             Console.WriteLine("Write what you would like to search!");
             searchText = Console.ReadLine();
-            Console.WriteLine("Loading...");
             input = searchText;
 
             int numTitles = 0;
