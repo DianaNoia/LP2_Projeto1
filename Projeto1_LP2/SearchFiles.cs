@@ -24,13 +24,15 @@ namespace Projeto1_LP2
             string searchText;
             Title[] queryResults;
 
-            Console.WriteLine("Write what you would like to search!");
-            searchText = Console.ReadLine();
-            input = searchText;
-
             int numTitles = 0;
 
             allGenres = new HashSet<string>();
+
+            mUI.ShowGenres(this);
+
+            Console.WriteLine("Write what you would like to search!");
+            searchText = Console.ReadLine();
+            input = searchText;
 
             string folderWithFiles = Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData), appName);
@@ -44,8 +46,8 @@ namespace Projeto1_LP2
 
             GZipReader(fileTitleBasicsFull, LineToTitle);
 
+
             mUI.ShowMemory();
-            mUI.ShowGenres(this);
 
             queryResults =
                 (from title in titles
@@ -98,6 +100,7 @@ namespace Projeto1_LP2
                     $", but got exception '{e.Message}'"
                     + $" with this stack trace: {e.StackTrace}");
             }
+
             foreach (string genre in titleGenres)
                 if (genre != null && genre.Length > 0 && genre != @"\N")
                     cleanTitlesGenres.Add(genre);
