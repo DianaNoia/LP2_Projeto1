@@ -11,7 +11,6 @@ namespace Projeto1_LP2
     class MenuUI
     {
         private static SearchFiles sf = new SearchFiles();
-        GenresEnum genreEnum;
         private const int numTitlesToShowOnScreen = 10;
 
         public void ShowMemory()
@@ -24,8 +23,10 @@ namespace Projeto1_LP2
 
         public void ShowGenres(SearchFiles sf)
         {
+            Console.Write($"=> Known Genres (28): \n");
             foreach (GenresEnum genre in Enum.GetValues(typeof(GenresEnum)))
                 Console.Write($"\t{genre}\n");
+            Console.WriteLine();
         }
 
         public void ShowSearchResults(Title[] queryResults, string searchText)
@@ -33,13 +34,14 @@ namespace Projeto1_LP2
             int numTitlesShown = 0;
 
             Console.WriteLine();
-            Console.WriteLine($"\t=> There are {queryResults.Count()} titles"
+            Console.WriteLine($"=> There are {queryResults.Count()} titles"
                 + $" with {searchText}.");
 
             while (numTitlesShown < queryResults.Length)
             {
-                Console.WriteLine($"\t=> Press key to see the next " +
+                Console.WriteLine($"<=> Press the arrow keys to see the next " +
                     $"{numTitlesToShowOnScreen} titles");
+                Console.WriteLine();
 
                 for (int i = numTitlesShown;
                     i < numTitlesShown + numTitlesToShowOnScreen &&
@@ -62,6 +64,10 @@ namespace Projeto1_LP2
                     }
                     Console.WriteLine();
                 }
+
+                Console.WriteLine();
+                Console.WriteLine("<=Press the backspace key to go back to" +
+                    " the main menu");
 
                 ConsoleKeyInfo pressedKey;
                 pressedKey = Console.ReadKey();

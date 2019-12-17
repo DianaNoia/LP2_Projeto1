@@ -46,7 +46,6 @@ namespace Projeto1_LP2
 
             GZipReader(fileTitleBasicsFull, LineToTitle);
 
-
             mUI.ShowMemory();
 
             queryResults =
