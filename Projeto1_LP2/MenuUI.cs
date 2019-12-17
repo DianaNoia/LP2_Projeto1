@@ -11,6 +11,7 @@ namespace Projeto1_LP2
     class MenuUI
     {
         private static SearchFiles sf = new SearchFiles();
+        GenresEnum genreEnum;
         private const int numTitlesToShowOnScreen = 10;
 
         public void ShowMemory()
@@ -23,17 +24,13 @@ namespace Projeto1_LP2
 
         public void ShowGenres(SearchFiles sf)
         {
-            Console.Write($"\t => Known Genres (total {sf.allGenres.Count}): ");
-            foreach (string genre in sf.allGenres.OrderBy(g => g))
+            foreach (GenresEnum genre in Enum.GetValues(typeof(GenresEnum)))
                 Console.Write($"\t{genre}\n");
-            Console.WriteLine();
         }
 
         public void ShowSearchResults(Title[] queryResults, string searchText)
         {
             int numTitlesShown = 0;
-
-            Console.WriteLine("Insert search term");
 
             Console.WriteLine();
             Console.WriteLine($"\t=> There are {queryResults.Count()} titles"
@@ -72,7 +69,6 @@ namespace Projeto1_LP2
                 if (pressedKey.Key == ConsoleKey.LeftArrow)
                 {
                     Console.Clear();
-                    ShowMemory();
                     numTitlesShown -= numTitlesToShowOnScreen;
                     if (numTitlesShown < queryResults.Length)
                         numTitlesShown = numTitlesToShowOnScreen;
@@ -80,7 +76,6 @@ namespace Projeto1_LP2
                 else if (pressedKey.Key == ConsoleKey.RightArrow)
                 {
                     Console.Clear();
-                    ShowMemory();
                     numTitlesShown += numTitlesToShowOnScreen;
                 }
                 else if (pressedKey.Key == ConsoleKey.Backspace)
@@ -94,16 +89,6 @@ namespace Projeto1_LP2
                     Console.ReadKey();
                     Console.Clear();
                 }
-
-                //try
-                //{
-
-                //}
-                //catch (Exception e)
-                //{
-                //    throw new IndexOutOfRangeException(
-                //        $"Thats the limit of the array! '{e}'");
-                //}
             }
         }
 
@@ -181,7 +166,6 @@ namespace Projeto1_LP2
                         break;
                 }
             }
-
         }
     }
 }
