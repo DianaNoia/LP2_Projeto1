@@ -23,6 +23,8 @@ namespace Projeto1_LP2
         {
             string searchText;
             Title[] queryResults;
+            string titleForSearch;
+            string genresForSearch;
 
             int numTitles = 0;
 
@@ -30,8 +32,28 @@ namespace Projeto1_LP2
 
             mUI.ShowGenres(this);
 
-            Console.WriteLine("Write what you would like to search!");
+            Console.WriteLine("Write the name of the title you would like to " +
+                "search and then the genres you would like to see, all " +
+                "separeted just by a space.");
+            Console.WriteLine("Exemple: nemo animation action");
+
             searchText = Console.ReadLine();
+            string[] toFilter = searchText.Split(" ");
+
+            for (int i = 0; i < toFilter.Length; i++)
+            {
+                if (i > 0)
+                {
+                    genresForSearch = toFilter[i];
+                    Console.Write(genresForSearch);
+                }
+                else
+                {
+                    titleForSearch = toFilter[0];
+                    Console.Write(titleForSearch);
+                }
+            }
+
             input = searchText;
 
             string folderWithFiles = Path.Combine(Environment.GetFolderPath(
