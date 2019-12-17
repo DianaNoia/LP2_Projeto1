@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Projeto1_LP2
 {
+    /// <summary>
+    /// Enumeration for the genres
+    /// </summary>
     public enum GenresEnum
     {
         Action,
@@ -16,7 +19,7 @@ namespace Projeto1_LP2
         Documentary,
         Drama,
         Family,
-        Fanatsy,
+        Fantasy,
         FilmNoir,
         GameShow,
         History,

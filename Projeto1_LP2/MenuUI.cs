@@ -8,11 +8,17 @@ using System.IO.Compression;
 
 namespace Projeto1_LP2
 {
+    /// <summary>
+    /// Class for the menu and UI
+    /// </summary>
     class MenuUI
     {
         private static SearchFiles sf = new SearchFiles();
         private const int numTitlesToShowOnScreen = 10;
 
+        /// <summary>
+        /// Method that shows the current value of memory the program is occupying
+        /// </summary>
         public void ShowMemory()
         {
             Console.WriteLine("\t Occupying " +
@@ -23,6 +29,10 @@ namespace Projeto1_LP2
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Void method that shows all the genres available
+        /// </summary>
+        /// <param name="sf"></param>
         public void ShowGenres(SearchFiles sf)
         {
             Console.Write($"=> Known Genres ({sf.allGenres.Count}): \n");
@@ -31,15 +41,23 @@ namespace Projeto1_LP2
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Method that shows all the results that have the searched keyword
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <param name="searchText"></param>
         public void ShowSearchResults(Title[] queryResults, string searchText)
         {
             int numTitlesShown = 0;
-
+                       
             Console.Clear();
+            
+            //Show all reuslts found
             if (searchText != null)
                 Console.WriteLine($"=> There are {queryResults.Count()} titles"
                     + $" with {searchText}.");
 
+            //Navigate between the results, showing the next or previous 10
             while (numTitlesShown < queryResults.Length)
             {
                 Console.WriteLine(
@@ -48,6 +66,7 @@ namespace Projeto1_LP2
                     $"Next {numTitlesToShowOnScreen} titles");
                 Console.WriteLine();
 
+                //Navigate the results and print them in groups of 10
                 for (int i = numTitlesShown;
                     i < numTitlesShown + numTitlesToShowOnScreen &&
                     i < queryResults.Length; i++)
@@ -61,6 +80,7 @@ namespace Projeto1_LP2
                     Console.Write(
                         $"({title.StartYear?.ToString() ?? "unknown year"}): ");
 
+                    // Shows the genres that pertains to the current tilte
                     foreach (string genre in title.Genres)
                     {
                         if (!firstGenre) Console.Write(" / ");
@@ -79,6 +99,7 @@ namespace Projeto1_LP2
                 ConsoleKeyInfo pressedKey;
                 pressedKey = Console.ReadKey();
 
+                //If left arrow key is pressed shows previous 10 results
                 if (pressedKey.Key == ConsoleKey.LeftArrow)
                 {
                     Console.Clear();
@@ -91,6 +112,7 @@ namespace Projeto1_LP2
                         $"Page: {numTitlesShown / numTitlesToShowOnScreen} " +
                         $"of {queryResults.Length / numTitlesToShowOnScreen}");
                 }
+                //If right arrow key is pressed shows next 10 results
                 else if (pressedKey.Key == ConsoleKey.RightArrow)
                 {
                     Console.Clear();
@@ -103,11 +125,13 @@ namespace Projeto1_LP2
                         $"Page: {numTitlesShown / numTitlesToShowOnScreen} " +
                         $"of {queryResults.Length / numTitlesToShowOnScreen}");
                 }
+                //If backspace key is pressed goes back to main menu
                 else if (pressedKey.Key == ConsoleKey.Backspace)
                 {
                     Console.Clear();
                     ShowMenu();
                 }
+                //If spacebar key is pressed allows to specific search terms
                 else if (pressedKey.Key == ConsoleKey.Spacebar)
                 {
                     Console.Clear();
@@ -148,6 +172,7 @@ namespace Projeto1_LP2
                             sf.OrderByGenre(queryResults), null);
                     }
                 }
+                //If input wrong, asks again
                 else
                 {
                     Console.WriteLine("Input not correct, try again.");
@@ -157,6 +182,9 @@ namespace Projeto1_LP2
             }
         }
 
+        /// <summary>
+        /// Method that prints the menu
+        /// </summary>
         public void ShowMenu()
         {
             Console.WriteLine("Welcome to our IMDb Searcher!");
@@ -170,6 +198,9 @@ namespace Projeto1_LP2
             ReadEntry();
         }
 
+        /// <summary>
+        /// Method that shows the credits
+        /// </summary>
         public void ShowCredits()
         {
             Console.WriteLine("This Searcher was made by:");
@@ -186,6 +217,9 @@ namespace Projeto1_LP2
             ShowMenu();
         }
 
+        /// <summary>
+        /// Method to navigate the menu
+        /// </summary>
         public void ReadEntry()
         {
             // A loop that will run while the condition is true, and while the

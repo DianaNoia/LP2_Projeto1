@@ -7,18 +7,31 @@ using System.IO.Compression;
 
 namespace Projeto1_LP2
 {
+    /// <summary>
+    /// Class that searches the files 
+    /// </summary>
     class SearchFiles
     {
+        //Constant sring with the folder name
         private const string appName = "MyIMDBSearcher";
 
+        //Constant string with file name
         private const string fileTitleBasics = "title.basics.tsv.gz";
 
+        //Icollection of titles
         private ICollection<Title> titles;
 
+        //ISet of strigns for all genres available
         public ISet<string> allGenres;
 
+        //Instance of menu UI
         private MenuUI mUI = new MenuUI();
 
+        /// <summary>
+        /// Method that searches the files with the input
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public Title[] FileSearch(out string input)
         {
             string searchText;
@@ -31,9 +44,10 @@ namespace Projeto1_LP2
             string genreForSearch = "";
 
             int numTitles = 0;
-
+             // Instance of an HashSet of strings
             allGenres = new HashSet<string>();
-
+            
+            // Info on how to search for titles 
             Console.WriteLine("How to Search: \n");
             Console.WriteLine("Write words separated by commas as so:");
             Console.WriteLine("NAME,TYPE,ADULT,STARTYEAR,ENDYEAR,GENRES");
@@ -41,7 +55,10 @@ namespace Projeto1_LP2
             Console.WriteLine("(You can skip parameters)");
             Console.WriteLine("Example: nemo,movie,,,,animation");
 
+            // Receive user input
             searchText = Console.ReadLine();
+            
+            // Splits the search inputs in miultiple strings
             string[] toFilter = searchText.Split(",");
 
             if (toFilter.Length == 6)
@@ -56,25 +73,32 @@ namespace Projeto1_LP2
 
             input = searchText;
 
+            // Navigates to folder
             string folderWithFiles = Path.Combine(Environment.GetFolderPath(
                 Environment.SpecialFolder.LocalApplicationData), appName);
 
+            // Finds specific file
             string fileTitleBasicsFull = Path.Combine(folderWithFiles,
                 fileTitleBasics);
 
+            // Calls method GZipReader
             GZipReader(fileTitleBasicsFull, (line) => numTitles++);
 
+            // Sorts title in a list of titles
             titles = new List<Title>(numTitles);
 
             GZipReader(fileTitleBasicsFull, LineToTitle);
 
+            // Calls method ShowMemory from MenuUi
             mUI.ShowMemory();
-
+            // Calls method ShowGenres from MenuUi
             mUI.ShowGenres(this);
 
+            // Asks for input to show results
             Console.WriteLine("\nPress any key to show results...");
             Console.ReadKey();
 
+            // Filters title list and searches for the input given
             queryResults =
                 (from title in titles
                  where
@@ -118,6 +142,11 @@ namespace Projeto1_LP2
             return queryResults;
         }
 
+        /// <summary>
+        /// Orders Results by name
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByName(Title[] queryResults)
         {
             return queryResults =
@@ -125,6 +154,11 @@ namespace Projeto1_LP2
                  select title).OrderBy(title => title.PrimaryTitle).ToArray();
         }
 
+        /// <summary>
+        /// Orders results by Type
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByType(Title[] queryResults)
         {
             return queryResults =
@@ -132,6 +166,11 @@ namespace Projeto1_LP2
                  select title).OrderBy(title => title.Type).ToArray();
         }
 
+        /// <summary>
+        /// Orders results by if they are for adults
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByAdult(Title[] queryResults)
         {
             return queryResults =
@@ -139,6 +178,11 @@ namespace Projeto1_LP2
                  select title).OrderBy(title => title.IsAdult).ToArray();
         }
 
+        /// <summary>
+        /// Order results by Start year
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByStartYear(Title[] queryResults)
         {
             return queryResults =
@@ -146,6 +190,11 @@ namespace Projeto1_LP2
                  select title).OrderBy(title => title.StartYear).ToArray();
         }
 
+        /// <summary>
+        /// Order results by End year
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByEndYear(Title[] queryResults)
         {
             return queryResults =
@@ -153,6 +202,11 @@ namespace Projeto1_LP2
                  select title).OrderBy(title => title.EndYear).ToArray();
         }
 
+        /// <summary>
+        /// Orders results by Genre
+        /// </summary>
+        /// <param name="queryResults"></param>
+        /// <returns></returns>
         public Title[] OrderByGenre(Title[] queryResults)
         {
             return queryResults =
@@ -161,6 +215,11 @@ namespace Projeto1_LP2
                     title => title.Genres.IEnumerableToString()).ToArray();
         }
 
+        /// <summary>
+        /// Method for the GZipReader, that unpacks  the files
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="actionForEachLine"></param>
         private static void GZipReader(string file, Action<string> actionForEachLine)
         {
             using (FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read))
@@ -180,6 +239,10 @@ namespace Projeto1_LP2
             }
         }
 
+        /// <summary>
+        /// Method that reads all file lines
+        /// </summary>
+        /// <param name="line"></param>
         private void LineToTitle(string line)
         {
             short aux;
@@ -190,6 +253,7 @@ namespace Projeto1_LP2
             short? startYear = null;
             short? endYear = null;
 
+            // Tries to catch exceptions
             try
             {
                 if (fields[4] == "0")
@@ -212,13 +276,16 @@ namespace Projeto1_LP2
                     + $" with this stack trace: {e.StackTrace}");
             }
 
+            // Sees what genres are valid for the title
             foreach (string genre in titleGenres)
                 if (genre != null && genre.Length > 0 && genre != @"\N")
                     cleanTitlesGenres.Add(genre);
 
+            // Adds valid genre on genre list
             foreach (string genre in cleanTitlesGenres)
                 allGenres.Add(genre);
 
+            // Instantiate title
             Title t = 
                 new Title(
                     fields[2],
