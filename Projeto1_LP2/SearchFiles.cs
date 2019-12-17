@@ -24,32 +24,34 @@ namespace Projeto1_LP2
             string searchText;
             Title[] queryResults;
             string titleForSearch = "";
-            string genresForSearch = "";
+            string typeForSearch = "";
+            string adultForSearch = "";
+            string startYearForSearch = "";
+            string endYearForSearch = "";
+            string genreForSearch = "";
 
             int numTitles = 0;
 
             allGenres = new HashSet<string>();
 
-            mUI.ShowGenres(this);
-
-            Console.WriteLine("Write the name of the title you would like to " +
-                "search and then the genres you would like to see, all " +
-                "separeted just by a comma.");
-            Console.WriteLine("Exemple: nemo,animation,action");
+            Console.WriteLine("How to Search: \n");
+            Console.WriteLine("Write words separated by commas as so:");
+            Console.WriteLine("NAME,TYPE,ADULT,STARTYEAR,ENDYEAR,GENRES");
+            Console.WriteLine("Example: nemo,movie,FALSE,2001,2005,animation");
+            Console.WriteLine("(You can skip parameters)");
+            Console.WriteLine("Example: nemo,movie,,,,animation");
 
             searchText = Console.ReadLine();
             string[] toFilter = searchText.Split(",");
 
-            for (int i = 0; i < toFilter.Length; i++)
+            if (toFilter.Length == 6)
             {
-                if (i > 0)
-                {
-                    genresForSearch = toFilter[i];
-                }
-                else
-                {
-                    titleForSearch = toFilter[0];
-                }
+                titleForSearch = toFilter[0];
+                typeForSearch = toFilter[1];
+                adultForSearch = toFilter[2];
+                startYearForSearch = toFilter[3];
+                endYearForSearch = toFilter[4];
+                genreForSearch = toFilter[5];
             }
 
             input = searchText;
@@ -68,21 +70,96 @@ namespace Projeto1_LP2
 
             mUI.ShowMemory();
 
+            mUI.ShowGenres(this);
+
+            Console.WriteLine("\nPress any key to show results...");
+            Console.ReadKey();
+
             queryResults =
                 (from title in titles
-                 where title.PrimaryTitle.ToLower().Contains(titleForSearch.ToLower())
-                 where title.Genres.Contains(genresForSearch)
-                 select title)
-                 .OrderBy(title => title.StartYear)
-                 .ThenBy(title => title.PrimaryTitle)
-                 .ToArray();
+                 where
+                    title
+                    .PrimaryTitle
+                    .ToLower()
+                    .Contains(titleForSearch.ToLower()) &&
 
-            Console.Write($"{titleForSearch}\t");
-            Console.Write(genresForSearch);
+                    title
+                    .Type
+                    .ToLower()
+                    .Contains(typeForSearch.ToLower()) &&
+
+                    title
+                    .IsAdult
+                    .ToString()
+                    .ToLower()
+                    .Contains(adultForSearch.ToLower()) &&
+
+                    title
+                    .StartYear
+                    .ToString()
+                    .ToLower()
+                    .Contains(startYearForSearch.ToLower()) &&
+
+                    title
+                    .EndYear
+                    .ToString()
+                    .ToLower()
+                    .Contains(endYearForSearch.ToLower()) &&
+
+                    title
+                    .Genres
+                    .IEnumerableToString()
+                    .ToLower()
+                    .Contains(genreForSearch.ToLower()) 
+
+                 select title)
+                    .ToArray();
 
             return queryResults;
         }
 
+        public Title[] OrderByName(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(title => title.PrimaryTitle).ToArray();
+        }
+
+        public Title[] OrderByType(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(title => title.Type).ToArray();
+        }
+
+        public Title[] OrderByAdult(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(title => title.IsAdult).ToArray();
+        }
+
+        public Title[] OrderByStartYear(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(title => title.StartYear).ToArray();
+        }
+
+        public Title[] OrderByEndYear(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(title => title.EndYear).ToArray();
+        }
+
+        public Title[] OrderByGenre(Title[] queryResults)
+        {
+            return queryResults =
+                (from title in queryResults
+                 select title).OrderBy(
+                    title => title.Genres.IEnumerableToString()).ToArray();
+        }
 
         private static void GZipReader(string file, Action<string> actionForEachLine)
         {
@@ -109,11 +186,22 @@ namespace Projeto1_LP2
             string[] fields = line.Split("\t");
             string[] titleGenres = fields[8].Split(",");
             ICollection<string> cleanTitlesGenres = new List<string>();
-            short? startYear;
+            bool isAdult = false;
+            short? startYear = null;
+            short? endYear = null;
 
             try
             {
-                startYear = short.TryParse(fields[5], out aux)
+                if (fields[4] == "0")
+                    isAdult = false;
+                else if (fields[4] == "1")
+                    isAdult = true;
+
+                    startYear = short.TryParse(fields[5], out aux)
+                    ? (short?)aux
+                    : null;
+
+                endYear = short.TryParse(fields[6], out aux)
                     ? (short?)aux
                     : null;
             }
@@ -131,7 +219,14 @@ namespace Projeto1_LP2
             foreach (string genre in cleanTitlesGenres)
                 allGenres.Add(genre);
 
-            Title t = new Title(fields[2], startYear, cleanTitlesGenres.ToArray());
+            Title t = 
+                new Title(
+                    fields[2],
+                    fields[1],
+                    isAdult,
+                    startYear,
+                    endYear,
+                    cleanTitlesGenres);
 
             titles.Add(t);
         }

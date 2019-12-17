@@ -16,15 +16,17 @@ namespace Projeto1_LP2
         public void ShowMemory()
         {
             Console.WriteLine("\t Occupying " +
-                        ((Process.GetCurrentProcess().VirtualMemorySize64) / 1024 / 1024) +
+                        ((Process
+                        .GetCurrentProcess()
+                        .WorkingSet64) / (1024 * 1024)) +
                         " megabytes of memory.");
             Console.WriteLine();
         }
 
         public void ShowGenres(SearchFiles sf)
         {
-            Console.Write($"=> Known Genres (28): \n");
-            foreach (GenresEnum genre in Enum.GetValues(typeof(GenresEnum)))
+            Console.Write($"=> Known Genres ({sf.allGenres.Count}): \n");
+            foreach (string genre in sf.allGenres)
                 Console.Write($"\t{genre}\n");
             Console.WriteLine();
         }
@@ -33,14 +35,17 @@ namespace Projeto1_LP2
         {
             int numTitlesShown = 0;
 
-            Console.WriteLine();
-            Console.WriteLine($"=> There are {queryResults.Count()} titles"
-                + $" with {searchText}.");
+            Console.Clear();
+            if (searchText != null)
+                Console.WriteLine($"=> There are {queryResults.Count()} titles"
+                    + $" with {searchText}.");
 
             while (numTitlesShown < queryResults.Length)
             {
-                Console.WriteLine($"<=> Press the arrow keys to see the next " +
-                    $"{numTitlesToShowOnScreen} titles");
+                Console.WriteLine(
+                    $"\nPrevious {numTitlesToShowOnScreen} " +
+                    $"titles <= [Arrow Keys] => " +
+                    $"Next {numTitlesToShowOnScreen} titles");
                 Console.WriteLine();
 
                 for (int i = numTitlesShown;
@@ -58,8 +63,8 @@ namespace Projeto1_LP2
 
                     foreach (string genre in title.Genres)
                     {
-                        if (!firstGenre) Console.Write("/");
-                        Console.Write($"{genre} ");
+                        if (!firstGenre) Console.Write(" / ");
+                        Console.Write($"{genre}");
                         firstGenre = false;
                     }
                     Console.WriteLine();
@@ -68,6 +73,8 @@ namespace Projeto1_LP2
                 Console.WriteLine();
                 Console.WriteLine("<=Press the backspace key to go back to" +
                     " the main menu");
+                Console.WriteLine("<=Press the space key to" +
+                    " order results");
 
                 ConsoleKeyInfo pressedKey;
                 pressedKey = Console.ReadKey();
@@ -76,18 +83,70 @@ namespace Projeto1_LP2
                 {
                     Console.Clear();
                     numTitlesShown -= numTitlesToShowOnScreen;
-                    if (numTitlesShown < queryResults.Length)
-                        numTitlesShown = numTitlesToShowOnScreen;
+
+                    if (numTitlesShown < 0)
+                        numTitlesShown = 0;
+
+                    Console.WriteLine(
+                        $"Page: {numTitlesShown / numTitlesToShowOnScreen} " +
+                        $"of {queryResults.Length / numTitlesToShowOnScreen}");
                 }
                 else if (pressedKey.Key == ConsoleKey.RightArrow)
                 {
                     Console.Clear();
                     numTitlesShown += numTitlesToShowOnScreen;
+
+                    if (numTitlesShown > queryResults.Length)
+                        numTitlesShown -= numTitlesToShowOnScreen;
+
+                    Console.WriteLine(
+                        $"Page: {numTitlesShown / numTitlesToShowOnScreen} " +
+                        $"of {queryResults.Length / numTitlesToShowOnScreen}");
                 }
                 else if (pressedKey.Key == ConsoleKey.Backspace)
                 {
                     Console.Clear();
                     ShowMenu();
+                }
+                else if (pressedKey.Key == ConsoleKey.Spacebar)
+                {
+                    Console.Clear();
+                    Console.WriteLine("\nYou can order by name, type, " +
+                        "adult, startYear, endYear and genre...");
+                    Console.Write("Order by: ");
+
+                    string temporary = Console.ReadLine();
+
+                    if (temporary == "name")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByName(queryResults), null);
+                    }
+                    if (temporary == "type")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByType(queryResults), null);
+                    }
+                    if (temporary == "adult")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByAdult(queryResults), null);
+                    }
+                    if (temporary == "startYear")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByStartYear(queryResults), null);
+                    }
+                    if (temporary == "endYear")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByEndYear(queryResults), null);
+                    }
+                    if (temporary == "genre")
+                    {
+                        ShowSearchResults(
+                            sf.OrderByGenre(queryResults), null);
+                    }
                 }
                 else
                 {
@@ -142,7 +201,7 @@ namespace Projeto1_LP2
                         string inputSupport;
                         Title[] queryResults = sf.FileSearch(out inputSupport);
                         ShowSearchResults(queryResults, inputSupport);
-                        break; ;
+                        break;
 
                     // If the player chooses 2
                     case "2":
