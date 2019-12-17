@@ -18,6 +18,7 @@ Projeto realizado por:
 * Diana Nóia
   
   * Comentário XML para Doxygen;
+  * Geração do Doxygen;
 
 (Não colaborou mais devido à sobreposição de projetos, principalmente o
 projeto 1 de AI e o projeto de VR, os quais priorizou)
