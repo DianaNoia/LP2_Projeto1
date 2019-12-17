@@ -25,7 +25,7 @@ namespace Projeto1_LP2
         {
             Console.Write($"\t => Known Genres (total {sf.allGenres.Count}): ");
             foreach (string genre in sf.allGenres.OrderBy(g => g))
-                Console.Write($"\t{genre}");
+                Console.Write($"\t{genre}\n");
             Console.WriteLine();
         }
 
